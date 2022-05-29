@@ -1,7 +1,8 @@
-/* Custom data base error */
-const DataBaseError = function (statement, message) {
-    this.statement = statement;
-    this.message = message;
+const DatabaseError = class {
+    constructor(statement, message) {
+        this.statement = statement;
+        this.message = message;
+    }
 };
 
 /** Command parser  */
@@ -82,7 +83,7 @@ const database = {
             return this[result.command](result.parsedStatement);
         }
         const message = `Syntax error: ${statement}`;
-        throw new DataBaseError(statement, message);
+        throw new DatabaseError(statement, message);
     },
 };
 
