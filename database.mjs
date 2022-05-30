@@ -1,9 +1,4 @@
-const DatabaseError = class {
-    constructor(statement, message) {
-        this.statement = statement;
-        this.message = message;
-    }
-};
+import { DatabaseError } from "./database-error.mjs";
 
 const Parser = class {
     constructor() {
