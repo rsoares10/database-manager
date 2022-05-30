@@ -26,10 +26,11 @@ const Parser = class {
     }
 };
 
-/* Data bse object */
-const database = {
-    tables: {},
-    parser: new Parser(),
+const Database = class {
+    constructor() {
+        this.tables = {};
+        this.parser = new Parser();
+    }
     createTable(parsedStatement) {
         let [, tableName, columns] = parsedStatement;
         this.tables[tableName] = {
@@ -41,7 +42,7 @@ const database = {
             const [name, type] = column.trim().split(" ");
             this.tables[tableName].columns[name] = type;
         }
-    },
+    }
     insert(parsedStatement) {
         let [, tableName, columns, values] = parsedStatement;
         columns = columns.split(", ");
@@ -53,7 +54,7 @@ const database = {
             row[column] = value;
         }
         this.tables[tableName].data.push(row);
-    },
+    }
     select(parsedStatement) {
         let [, columns, tableName, whereClause] = parsedStatement;
         let rows = this.tables[tableName].data;
@@ -68,7 +69,7 @@ const database = {
             return selectedRow;
         });
         return rows;
-    },
+    }
     delete(parsedStatement) {
         const [, tableName, whereClause] = parsedStatement;
         if (whereClause) {
@@ -77,7 +78,7 @@ const database = {
         } else {
             this.tables[tableName].data = [];
         }
-    },
+    }
     execute(statement) {
         const result = this.parser.parse(statement);
         if (result) {
@@ -85,11 +86,12 @@ const database = {
         }
         const message = `Syntax error: ${statement}`;
         throw new DatabaseError(statement, message);
-    },
+    }
 };
 
 /* Try a few data base operations*/
 try {
+    const database = new Database();
     database.execute("create table author (id number, name string, age number, city string, state string, country string)");
     database.execute("insert into author (id, name, age) values (1, Douglas Crockford, 62)");
     database.execute("insert into author (id, name, age) values (2, Linus Torvalds, 47)");
