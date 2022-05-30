@@ -26,7 +26,7 @@ const Parser = class {
     }
 };
 
-const Database = class {
+export class Database {
     constructor() {
         this.tables = {};
         this.parser = new Parser();
@@ -87,4 +87,4 @@ const Database = class {
         const message = `Syntax error: ${statement}`;
         throw new DatabaseError(statement, message);
     }
-};
+}
