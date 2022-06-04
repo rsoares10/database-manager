@@ -31,7 +31,7 @@ export class DatabaseError {
 }
 ```
 
-## SQL Query Parser
+## SQL Parser
 
 Every query is parsed using regular expressions. The way to add new query commands depends on extending or adding new RegExps.
 
