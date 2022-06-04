@@ -114,7 +114,7 @@ const database = new Database(); // Get a database instance
 
 ## Contribute
 
-Since it's a simple project, contribute by opening pull requests to the develop branch. As soon as the changes reaches a stable state we merge them into the master branch.
+Since it's a simple project, contribute by opening pull requests to the **develop** branch. As soon as the changes reaches a stable state we merge them into the master branch.
 
 ### Contact
 
