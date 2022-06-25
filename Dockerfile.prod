@@ -1,0 +1,13 @@
+# First stage
+FROM node:latest AS builder
+
+WORKDIR /app
+
+COPY ./ ./
+
+# Production
+FROM node:slim
+
+WORKDIR /app
+
+COPY --from=builder /app ./

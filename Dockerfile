@@ -1,3 +1,5 @@
-FROM node:slim
+FROM node:latest
+
+WORKDIR /app
 
 COPY . /app
