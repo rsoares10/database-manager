@@ -1,6 +1,8 @@
-# Database Manager
+# Database Simulator
 
-A simple database manager simulator written in JavaScript. The goal is to provide a simulation that emulates database interactions using SQL queries.
+Database simulator written in JavaScript. The goal is to provide a simulation that emulates database interactions using SQL queries.
+
+# Getting Started
 
 ## The DataBase Object
 
@@ -8,19 +10,19 @@ This object provides methods for creating tables, query data, inserting and dele
 
 ## Database.execute()
 
-Although the Database object has internally implemented methods for managing the database, to properly execute SQL commands use the execute() method. It's an API through which you can safely pass in sQL commands to be executed over the database.
+Use the `execute()` method to safely pass in SQL commands to be executed over the database. The internal methods for managing the database are implemented within the `Database` object.
 
 ```javascript
-database.execute("create table author (id number, name string, age number, city string, state string, country string)"),
+database.execute("CREATE TABLE author (id NUMBER, name STRING, age NUMBER, city STRING, state STRING, country STRING)");
 ```
 
 ## Async Behavior
 
-The simulation is based on asynchronous behavior, just like it would in real databases. The query latency can be adjusted on the execute method of Database object. The default latency is 1000ms (1s).
+The simulation is based on asynchronous behavior, like in real databases. The latency for queries can be adjusted in the `execute` method of the `Database` object. The default latency is 1000ms (1s).
 
 ## DatabaseError
 
-Consider wrapping the sQL queries inside try/catch blocks. To help error handling possible issues the catch block wil provide a DatabaseError in case of query failure. The error message can be retrieved through the DatabaseError.message field.
+Wrap SQL queries in try/catch blocks to handle any issues. If a query fails, a `DatabaseError` will be provided in the catch block. Retrieve the error message through the `DatabaseError.message` field.
 
 ```javascript
 export class DatabaseError {
@@ -33,16 +35,16 @@ export class DatabaseError {
 
 ## SQL Parser
 
-Every query is parsed using regular expressions. The way to add new query commands depends on extending or adding new RegExps.
+Every query is parsed using regular expressions. New query commands can be added by extending or adding new RegExps in the `Parser` class.
 
 ```javascript
 export class Parser {
     constructor() {
         this.commands = new Map();
-        this.commands.set("createTable", /create table ([a-z]+) \((.+)\)/);
-        this.commands.set("insert", /insert into ([a-z]+) \((.+)\) values \((.+)\)/);
-        this.commands.set("select", /select (.+) from ([a-z]+)(?: where (.+))?/);
-        this.commands.set("delete", /delete from ([a-z]+)(?: where (.+))?/);
+        this.commands.set("createTable", /CREATE TABLE ([a-z]+)\s+\((.+)\)/);
+        this.commands.set("insert", /INSERT INTO ([a-z]+)\s+\((.+)\)\s+VALUES\s+\((.+)\)/);
+        this.commands.set("select", /SELECT (.+)\s+FROM\s+([a-z]+)\s+(?:WHERE\s+(.+))?/);
+        this.commands.set("delete", /DELETE FROM ([a-z]+)\s+(?:WHERE\s+(.+))?/);
     }
     parse(statement) {
         for (let [command, regexp] of this.commands) {
@@ -60,7 +62,7 @@ export class Parser {
 
 ## Usage Example
 
-Since the goal was to use the most of OOP, it's quite easy to use the database simulator. Only intantiate the Database object and start issuing SQL commands to the database! But careful when passing in syntaticaly bad queries. A nice approach is to wrap the query block into a try/atch block.
+It's easy to use the database simulator since the project makes use of OOP. Simply instantiate the `Database` object and start issuing SQL commands. Wrap the query block in a try/catch block to handle any syntax errors.
 
 ```javascript
 const database = new Database(); // Get a database instance
@@ -68,16 +70,16 @@ const database = new Database(); // Get a database instance
     try {
         await Promise.all([
             // Perform a block of SQL commands
-            database.execute("create table author (id number, name string, age number, city string, state string, country string)"),
-            database.execute("insert into author (id, name, age) values (1, Douglas Crockford, 62)"),
-            database.execute("insert into author (id, name, age) values (2, Linus Torvalds, 47)"),
-            database.execute("insert into author (id, name, age) values (3, Martin Fowler, 54)"),
-            database.execute("insert into author (id, name, age) values (4, Alan Kay, 60)"),
-            database.execute("insert into author (id, name, age) values (5, James Gosling, 58)"),
-            database.execute("insert into author (id, name, age) values (6, Guido van Rossum, 55)"),
-            database.execute("delete from author where id = 2"),
+            database.execute("CREATE TABLE author (id NUMBER, name STRING, age NUMBER, city STRING, state STRING, country STRING)"),
+            database.execute("INSERT INTO author (id, name, age) VALUES (1, 'Douglas Crockford', 62)"),
+            database.execute("INSERT INTO author (id, name, age) VALUES (2, 'Linus Torvalds', 47)"),
+            database.execute("INSERT INTO author (id, name, age) VALUES (3, 'Martin Fowler', 54)"),
+            database.execute("INSERT INTO author (id, name, age) VALUES (4, 'Alan Kay', 60)"),
+            database.execute("INSERT INTO author (id, name, age) VALUES (5, 'James Gosling', 58)"),
+            database.execute("INSERT INTO author (id, name, age) VALUES (6, 'Guido van Rossum', 55)"),
+            database.execute("DELETE FROM author WHERE id = 2"),
         ]);
-        const result = await database.execute("select name, age from author"); // Query some data right after
+        const result = await database.execute("SELECT name, age FROM author"); // Query some data right after
         console.log(JSON.stringify(result, undefined, 2)); // Console the queried data
     } catch (e) {
         console.log(e.message);
@@ -85,7 +87,7 @@ const database = new Database(); // Get a database instance
 })();
 ```
 
-## Output
+### Output
 
 ```console
 [
@@ -114,8 +116,8 @@ const database = new Database(); // Get a database instance
 
 ## Contribute
 
-Since it's a simple project, contribute by opening pull requests to the **develop** branch. As soon as the changes reaches a stable state we merge them into the master branch.
+If you'd like to contribute to the project, feel free to fork the repository and make a pull request.
 
-### Contact
+## License
 
--   LinkedIn - linkedin.com/in/rsoares10/
+This project is licensed under the MIT license.
